@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Fish
-        uses: fish-shop/install-fish-shell@v1
+        uses: fish-shop/install-fish-shell@v2
 
       - name: Indent check
         uses: fish-shop/indent-check@v2
