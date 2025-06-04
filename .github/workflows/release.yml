@@ -19,7 +19,7 @@ jobs:
         uses: fish-actions/install-fish@v2
 
       - name: Syntax check
-        uses: fish-shop/syntax-check@v1
+        uses: fish-shop/syntax-check@v2
         with:
           pattern: "functions/*.fish conf.d/*.fish completions/*.fish"
 
