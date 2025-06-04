@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fish
+        uses: fish-shop/install-fish-shell@v1
+
+      - name: Indent check
+        uses: fish-shop/indent-check@v1
+
+      - name: Syntax check
+        uses: fish-shop/syntax-check@v2
+        with:
+          pattern: "functions/*.fish conf.d/*.fish completions/*.fish"
+
+      - name: Install plugin
+        uses: fish-shop/install-plugin@v2
+        with:
+          plugin-manager: fisher
+          plugins: .
+
+      - name: Test functions are defined
+        run: fish -c "functions --query jjbranch jjpr jgp jj_configure"

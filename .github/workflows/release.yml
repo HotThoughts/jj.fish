@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Fish
+        uses: fish-actions/install-fish@v2
+
+      - name: Syntax check
+        uses: fish-shop/syntax-check@v1
+        with:
+          pattern: "functions/*.fish conf.d/*.fish completions/*.fish"
+
+      - name: Create Release
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+
