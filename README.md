@@ -1,24 +1,21 @@
 # jj.fish 🌿
 
-A Fish shell plugin for [jj (Jujutsu)](https://github.com/martinvonz/jj) with shortcuts for common operations and GitHub PR automation.
+A Fish shell plugin for [jj (Jujutsu)](https://github.com/martinvonz/jj) that provides convenient abbreviations for common operations.
 
 ## Features
 
-- **🌿 Smart branch creation**: Create bookmarks with `push-<change-id>` format
-- **🚀 One-command PR workflow**: Branch + push + PR creation in a single command
-- **⚡ Quick shortcuts**: Fast access to common jj operations
-- **🔧 Configurable**: Customize branch prefixes and change ID length
-- **🛡️ Robust error handling**: Clear error messages and dependency checks
+- **⚡ Quick abbreviations**: Fast shortcuts for common jj operations
+- **🔧 Simple setup**: Just install and start using
+- **🚀 Workflow-focused**: Covers the most frequently used jj commands
 
 ## Installation
 
 ### Prerequisites
 
-| Tool | Minimum Version | Purpose |
-|------|----------------|---------|
-| [Fish](https://fishshell.com/) | 3.4.0+ | Shell environment |
-| [jj](https://github.com/martinvonz/jj) | 0.29.0+ | Version control |
-| [GitHub CLI](https://cli.github.com/) | 2.0.0+ | PR creation |
+| Tool | Purpose |
+|------|---------|
+| [Fish](https://fishshell.com/) | Shell environment (3.4.0+) |
+| [jj](https://github.com/martinvonz/jj) | Version control (0.29.0+) |
 
 ### Install with Fisher
 
@@ -26,223 +23,185 @@ A Fish shell plugin for [jj (Jujutsu)](https://github.com/martinvonz/jj) with sh
 fisher install HotThoughts/jj.fish
 ```
 
+## Abbreviations
+
+Once installed, you can use these abbreviations in your Fish shell:
+
+### Core Operations
+
+| Abbreviation | Expands to | Description |
+|--------------|------------|-------------|
+| `jjl` | `jj log` | Show commit history |
+| `jjll` | `jj log --limit` | Show limited commit history |
+| `jjlr` | `jj log --revisions` | Show log for specific revisions |
+| `jjst` | `jj st` | Show working copy status |
+| `jjd` | `jj describe` | Edit change description |
+| `jjdm` | `jj describe -m` | Set change description message |
+| `jjnm` | `jj new main` | Create new change based on main |
+
+### Git Integration
+
+| Abbreviation | Expands to | Description |
+|--------------|------------|-------------|
+| `jjgic` | `jj git init --colocate` | Initialize colocated Git/jj repo |
+| `jjgp` | `jj git push` | Push to Git remote |
+| `jjgpc` | `jj git push --change` | Push specific change to Git remote |
+
+### Legacy Abbreviations
+
+These are also available for compatibility:
+
+| Abbreviation | Expands to | Description |
+|--------------|------------|-------------|
+| `jgi` | `jj git init --colocate` | Initialize colocated repo |
+| `jgp` | `jj git push` | Push to Git remote |
+| `jd` | `jj describe -m` | Set change description |
+
 ## Quick Start
 
 ```fish
-# Make some changes
-echo "Hello World" > hello.txt
-jj commit -m "feat: add hello world"
+# Initialize a new repository
+jjgic
 
-# Create branch, push, and open PR in one command
-jjpr
+# Check status
+jjst
 
-# Or do it step by step
-jjbranch                    # Create push-mwmolltxkqkr bookmark
-jgp --allow-new            # Push to GitHub
-gh pr create --fill         # Create PR manually
+# View commit history
+jjl
+
+# Create a new change
+jjnm
+
+# Make some changes, then describe them
+jjdm "feat: add new feature"
+
+# Push to remote
+jjgp
 ```
 
-## Commands
-
-### `jjbranch`
-
-Create a bookmark with format `push-<change-id>`:
-
-```fish
-jjbranch
-# Creates: push-mwmolltxkqkr
-```
-
-### `jjpr`
-
-Create bookmark, push to GitHub, and open pull request:
-
-```fish
-jjpr
-```
-
-This command:
-1. 📝 Creates a bookmark named `push-<change-id>`
-2. 🌱 Creates and checks out a matching Git branch if needed
-3. 🚀 Pushes the bookmark and branch to GitHub
-4. 🔗 Creates a PR using the jj change description as title
-5. 👤 Auto-assigns the PR to you
-
-> **Note:**  
-> `jjpr` does not require a clean working directory. Only committed changes will be included in the pull request.
-
-### `jgp`
-
-Shortcut for `jj git push`:
-
-```fish
-jgp                         # jj git push
-jgp --allow-new            # jj git push --allow-new
-jgp --branch main          # jj git push --branch main
-```
-
-### `jj_configure`
-
-Configure plugin settings:
-
-```fish
-jj_configure --help         # Show help
-jj_configure               # Show current settings
-jj_configure --prefix pr-  # Change branch prefix
-jj_configure --length 8    # Change change ID length
-jj_configure --reset       # Reset to defaults
-```
-
-## Configuration
-
-### Branch Naming
-
-Control how branches are named:
-
-```fish
-# Change branch prefix (default: "push-")
-jj_configure --prefix "feature-"
-
-# Change change ID length (default: 12)
-jj_configure --length 8
-
-# Result: feature-mwmolltx
-```
-
-### Manual Configuration
-
-You can also set variables directly:
-
-```fish
-# In your config.fish
-set -U jj_fish_branch_prefix "pr-"
-set -U jj_fish_change_id_length 10
-```
-
-## Examples
+## Usage Examples
 
 ### Basic Workflow
 
 ```fish
-# Start working on a feature
-jj new
-echo "console.log('Hello')" > app.js
-jj commit -m "feat: add hello world logging"
+# Start a new change
+jjnm
+# Equivalent to: jj new main
 
-# Create PR
-jjpr
-# ✓ Created bookmark: push-abc123def456
-# 🚀 Pushing to GitHub...
-# 🔗 Creating pull request...
-# ✅ Pull request created successfully!
+# Check what's changed
+jjst
+# Equivalent to: jj st
+
+# View recent commits
+jjll 5
+# Equivalent to: jj log --limit 5
+
+# Describe your changes
+jjdm "fix: resolve issue with parsing"
+# Equivalent to: jj describe -m "fix: resolve issue with parsing"
+
+# Push to remote
+jjgp
+# Equivalent to: jj git push
 ```
 
-### Custom Branch Naming
+### Git Integration
 
 ```fish
-# Configure custom prefix
-jj_configure --prefix "feature-" --length 8
+# Initialize a colocated repository
+jjgic
+# Equivalent to: jj git init --colocate
 
-# Create branch
-jjbranch
-# ✓ Created bookmark: feature-abc123de
+# Push a specific change
+jjgpc @
+# Equivalent to: jj git push --change @
 ```
 
-### Step-by-Step Workflow
+### Exploring History
 
 ```fish
-# Create bookmark only
-jjbranch
+# View commit graph
+jjl
 
-# Make more changes...
-echo "More code" >> app.js
-jj commit -m "feat: add more functionality"
+# View specific revisions
+jjlr main..@
+# Equivalent to: jj log --revisions main..@
 
-# Push when ready
-jgp --allow-new
-
-# Create PR manually with gh
-gh pr create --fill --assignee @me
+# Limited history view
+jjll 10
+# Equivalent to: jj log --limit 10
 ```
 
-## Branch Naming Convention
+## How Abbreviations Work
 
-The plugin generates branch names using this format:
+Fish abbreviations expand when you press space or enter. For example:
+1. Type `jjl`
+2. Press space
+3. Fish expands it to `jj log`
+4. Continue typing your arguments
 
+You can also see what an abbreviation expands to:
+```fish
+abbr --show jjl
+# Shows: abbr jjl 'jj log'
 ```
-{prefix}{change_id}
-```
 
-Where:
-- **prefix**: Configurable prefix (default: `push-`)
-- **change_id**: First N characters of jj change ID (default: 12)
+## Customization
 
-### Examples
-
-| Configuration | Change ID | Result |
-|---------------|-----------|---------|
-| `push-` + 12 chars | `mwmolltxkqkr...` | `push-mwmolltxkqkr` |
-| `feature-` + 8 chars | `abc12345...` | `feature-abc12345` |
-| `pr-` + 16 chars | `xyz98765...` | `pr-xyz98765abcd1234` |
-
-## Error Handling
-
-The plugin provides clear error messages:
+You can add your own jj abbreviations:
 
 ```fish
-jjpr
-# Error: jj (Jujutsu) is not installed or not in PATH
+# Add custom abbreviations
+abbr --add jjs 'jj show'
+abbr --add jjco 'jj checkout'
+abbr --add jjam 'jj abandon @'
 
-jjbranch
-# Error: Failed to get change ID. Are you in a jj repository?
-
-jjpr
-# Error: GitHub CLI (gh) is not installed or not in PATH
-
-jjpr
-# ⚠️  Warning: You have uncommitted changes. Only committed changes will be included in the pull request.
+# Remove abbreviations you don't want
+abbr --erase jjnm
 ```
 
 ## Requirements
 
-- **Git repository with GitHub remote**: Required for `jjpr`
-- **GitHub CLI authentication**: Run `gh auth login` first
-- **jj repository**: Commands must be run inside a jj-managed repository
+- **Fish shell**: Version 3.4.0 or later
+- **jj (Jujutsu)**: Version 0.29.0 or later for full compatibility
+- **Git**: Required for git integration features
+
+The plugin will show warnings on startup if dependencies are missing, but core abbreviations will still work.
 
 ## Troubleshooting
 
-### "Failed to get change ID"
+### Abbreviations not working
 
-Make sure you're in a jj repository and have committed changes:
-
-```fish
-jj init
-jj commit -m "initial commit"
-jjbranch  # Should work now
-```
-
-### "Failed to push to GitHub"
-
-Ensure your repository has a GitHub remote:
+Make sure the plugin is properly installed:
 
 ```fish
-git remote -v  # Check for GitHub remote
-jj git remote add origin https://github.com/username/repo.git
+fisher list | grep jj.fish
 ```
 
-### "Failed to create pull request"
-
-Check GitHub CLI authentication:
+If not found, reinstall:
 
 ```fish
-gh auth status
-gh auth login  # If not authenticated
+fisher install HotThoughts/jj.fish
 ```
 
-### "Why is my uncommitted work not in the PR?"
+### "jj command not found"
 
-Only committed changes are included in the pull request.  
-If you have uncommitted changes, commit them before running `jjpr` if you want them included.
+Install jj following the [official installation guide](https://github.com/martinvonz/jj#installation).
+
+### Git operations failing
+
+Ensure you're in a repository with a Git remote configured:
+
+```fish
+jj git remote list
+```
+
+## Contributing
+
+Suggestions for additional useful abbreviations are welcome! Please consider:
+- Frequency of use
+- Consistency with existing patterns  
+- Avoiding conflicts with common commands
 
 ## License
 
@@ -250,8 +209,5 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## Credits
 
-Inspired by:
-- [fzf.fish](https://github.com/PatrickF1/fzf.fish) for plugin structure
 - [jj](https://github.com/martinvonz/jj) for the amazing VCS
-- Fish shell community for best practices
-
+- Fish shell community for abbreviation best practices
