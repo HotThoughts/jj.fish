@@ -45,51 +45,15 @@ function test_prerequisites
     echo ""
 end
 
-function test_jj_configure
-    echo "🔧 Testing jj_configure function..."
+function test_abbreviations
+    echo "🔧 Testing abbreviations..."
 
-    # Test help
-    echo "Testing --help:"
-    jj_configure --help
+    echo "Testing jj abbreviations are loaded:"
+    abbr --show | grep -E "^abbr jj" | head -5
     echo ""
 
-    # Test current settings
-    echo "Current settings:"
-    jj_configure
-    echo ""
-
-    # Test setting prefix
-    echo "Setting prefix to 'test-':"
-    jj_configure --prefix test-
-    echo ""
-
-    # Test setting length
-    echo "Setting length to 8:"
-    jj_configure --length 8
-    echo ""
-
-    # Test combined settings
-    echo "Setting prefix to 'feature-' and length to 10:"
-    jj_configure --prefix feature- --length 10
-    echo ""
-
-    # Test error cases
-    echo "Testing error cases:"
-    echo "Empty prefix (should fail):"
-    jj_configure --prefix ""
-    echo ""
-
-    echo "Invalid length (should fail):"
-    jj_configure --length abc
-    echo ""
-
-    echo "Length out of range (should fail):"
-    jj_configure --length 0
-    echo ""
-
-    # Reset to defaults
-    echo "Resetting to defaults:"
-    jj_configure --reset
+    echo "Testing alternative abbreviations are loaded:"
+    abbr --show | grep -E "^abbr j[gd]" | head -3
     echo ""
 end
 
@@ -113,68 +77,47 @@ function test_setup_repo
     echo ""
 end
 
-function test_jjbranch
-    echo "🌿 Testing jjbranch function..."
+function test_jj_commands
+    echo "🌿 Testing jj command abbreviations..."
 
-    # Test basic functionality
-    echo "Creating branch with default settings:"
-    jjbranch
+    echo "Testing jj status:"
+    jjst
     echo ""
 
-    # Test with custom settings
-    echo "Testing with custom prefix:"
-    jj_configure --prefix test- --length 6
-    jjbranch
+    echo "Testing jj log (limited):"
+    jjll 3
     echo ""
 
-    # Create another change to test different change ID
-    echo "# Additional content" >>README.md
-    jj commit -m "docs: add more content to README"
-
-    echo "Creating branch for new change:"
-    jjbranch
-    echo ""
-
-    # Reset settings
-    jj_configure --reset
+    echo "Testing jj describe:"
+    echo "Would run: jjdm 'test commit message'"
     echo ""
 end
 
-function test_jgp
-    echo "⚡ Testing jgp function..."
+function test_git_integration
+    echo "⚡ Testing git integration abbreviations..."
 
-    # Test help
-    echo "Testing jgp --help:"
-    jgp --help
+    echo "Testing git push abbreviation:"
+    echo "Would run: jjgp (equivalent to 'jj git push')"
     echo ""
 
-    # Test dry run if available
-    echo "Testing jgp with --dry-run (if supported):"
-    jgp --dry-run 2>/dev/null; or echo "Dry run not supported by jj version"
+    echo "Testing git init abbreviation:"
+    echo "Would run: jjgic (equivalent to 'jj git init --colocate')"
     echo ""
 end
 
-function test_jjpr
-    echo "🚀 Testing jjpr function (GitHub integration)..."
+function test_alternative_abbreviations
+    echo "🚀 Testing alternative abbreviations..."
 
-    if not command -q gh
-        echo "⚠️  Skipping jjpr test - GitHub CLI not available"
-        return 0
-    end
+    echo "Testing alternative git init:"
+    echo "Would run: jgi (equivalent to 'jj git init --colocate')"
+    echo ""
 
-    # Check if authenticated
-    if not gh auth status >/dev/null 2>&1
-        echo "⚠️  Skipping jjpr test - not authenticated with GitHub CLI"
-        echo "Run 'gh auth login' to test PR functionality"
-        return 0
-    end
+    echo "Testing alternative git push:"
+    echo "Would run: jgp (equivalent to 'jj git push')"
+    echo ""
 
-    echo "⚠️  jjpr test requires a real GitHub repository"
-    echo "This test will NOT actually create a PR"
-    echo "To test manually:"
-    echo "1. Create a GitHub repository"
-    echo "2. Add it as origin: jj git remote add origin <repo-url>"
-    echo "3. Run: jjpr"
+    echo "Testing alternative describe:"
+    echo "Would run: jd 'message' (equivalent to 'jj describe -m message')"
     echo ""
 end
 
@@ -183,12 +126,9 @@ function test_error_conditions
 
     # Test outside jj repository
     cd /tmp
-    echo "Testing jjbranch outside jj repository (should fail):"
-    jjbranch
-    echo ""
-
-    echo "Testing jjpr outside jj repository (should fail):"
-    jjpr
+    echo "Testing jj commands outside jj repository:"
+    echo "jjst should show error or no repository status"
+    jjst 2>/dev/null; or echo "Not in a jj repository (expected)"
     echo ""
 
     # Return to test directory
@@ -204,11 +144,11 @@ function run_all_tests
     trap cleanup EXIT
 
     test_prerequisites; or return 1
-    test_jj_configure
+    test_abbreviations
     test_setup_repo
-    test_jjbranch
-    test_jgp
-    test_jjpr
+    test_jj_commands
+    test_git_integration
+    test_alternative_abbreviations
     test_error_conditions
 
     echo "✅ All manual tests completed!"
@@ -216,11 +156,10 @@ function run_all_tests
     echo "Test repository is at: $test_dir"
     echo "Run 'rm -rf $test_dir' to clean up when done"
     echo ""
-    echo "To test GitHub functionality:"
-    echo "1. Create a test repository on GitHub"
-    echo "2. cd $test_dir"
-    echo "3. jj git remote add origin <your-repo-url>"
-    echo "4. jjpr"
+    echo "To test abbreviations manually:"
+    echo "1. cd $test_dir"
+    echo "2. Try typing abbreviations like 'jjl', 'jjst', 'jjgp' etc."
+    echo "3. They should expand when you press space or enter"
 end
 
 # Check if script is being run directly
