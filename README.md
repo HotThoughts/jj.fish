@@ -29,6 +29,10 @@ fisher install HotThoughts/jj.fish
 |-------|--------------------------|-------|---------------|
 | `jd` | `jj describe -m` | | |
 
+### PR Creation
+| `jjpr <change-id>` | Push change and create GitHub PR |
+|--------------------|----------------------------------|
+
 ## Quick Start
 
 ```fish
@@ -40,9 +44,9 @@ jjst
 jjnm
 jjdm "feat: add feature"
 
-# View history and push
+# View history, push and create PR
 jjl
-jjgp
+jjpr <change-id>
 ```
 
 ## How It Works
