@@ -2,9 +2,7 @@ function jjpr --description "Push jj change and create GitHub PR"
     set -l change_id $argv[1]
 
     if test -z "$change_id"
-        echo "Usage: jjpr <change-id>"
-        echo "Example: jjpr abc123def"
-        return 1
+        set change_id "@"
     end
 
     echo "📝 Getting commit description..."
