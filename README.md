@@ -120,6 +120,80 @@ abbr --add jjs 'jj show'
 abbr --erase jjnm
 ```
 
+## Troubleshooting
+
+### "jj not found" error
+The plugin requires jj to be installed and in your PATH.
+
+**Install jj:**
+```fish
+# macOS
+brew install jj
+
+# Or from source
+cargo install --git https://github.com/martinvonz/jj jj-cli
+```
+
+**Verify installation:**
+```fish
+jj --version
+```
+
+### "gh CLI not found" when using jjpr
+The `jjpr` function requires the GitHub CLI to create pull requests.
+
+**Install gh:**
+```fish
+# macOS
+brew install gh
+
+# Linux
+sudo apt install gh
+```
+
+**Authenticate:**
+```fish
+gh auth login
+```
+
+### Abbreviations not working
+1. **Check plugin is loaded:**
+   ```fish
+   abbr --show | grep jj
+   ```
+   Should show jj abbreviations.
+
+2. **Reload Fish config:**
+   ```fish
+   source ~/.config/fish/config.fish
+   ```
+
+3. **Reinstall plugin:**
+   ```fish
+   fisher remove HotThoughts/jj.fish
+   fisher install HotThoughts/jj.fish
+   ```
+
+### jjpr fails with "could not determine branch name"
+This occurs when jj doesn't output the expected branch name format after pushing.
+
+**Workaround:**
+1. Push manually: `jj git push -c <change-id>`
+2. Note the branch name from output
+3. Create PR manually: `gh pr create --head <branch-name>`
+
+**Report:** If this happens consistently, please file an issue with your jj version (`jj --version`).
+
+### Using repositories with non-"main" default branches
+The `jjpr` function automatically detects your repository's default branch (main, master, develop, etc.) and creates PRs against it. No configuration needed.
+
+### Change ID not found
+Ensure you're using a valid change ID from `jj log`:
+```fish
+jjl              # View change history
+jjpr abc123def   # Use the change ID prefix (first 7-12 chars)
+```
+
 ## License
 
 MIT
