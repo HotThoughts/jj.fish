@@ -68,7 +68,7 @@ assert_success
 
 # Test 6: Function validates command exit codes
 run_test "Function checks exit status"
-grep -q "status" "$plugin_dir/functions/jjpr.fish"
+grep -q status "$plugin_dir/functions/jjpr.fish"
 assert_success
 
 echo ""

@@ -78,7 +78,7 @@ function jjpr --description "Push jj change and create GitHub PR"
     end
     if test -z "$default_branch"
         # Last resort: assume main
-        set default_branch "main"
+        set default_branch main
     end
 
     # Create GitHub PR

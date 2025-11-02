@@ -27,7 +27,7 @@ end
 for test_file in $test_files
     set -l test_name (basename $test_file)
     echo "→ Running $test_name"
-    echo "---"
+    echo ---
 
     if fish "$test_file"
         set total_passed (math $total_passed + 1)

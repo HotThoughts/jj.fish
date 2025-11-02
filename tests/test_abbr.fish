@@ -30,23 +30,23 @@ echo "Testing abbreviations..."
 echo ""
 
 # Test core abbreviations
-assert_abbr_exists "jjl" "'jj log'"
-assert_abbr_exists "jjst" "'jj st'"
-assert_abbr_exists "jjd" "'jj describe'"
-assert_abbr_exists "jjdm" "'jj describe -m'"
-assert_abbr_exists "jjnm" "'jj new main'"
-assert_abbr_exists "jjc" "'jj commit'"
-assert_abbr_exists "jjci" "'jj commit -i'"
+assert_abbr_exists jjl "'jj log'"
+assert_abbr_exists jjst "'jj st'"
+assert_abbr_exists jjd "'jj describe'"
+assert_abbr_exists jjdm "'jj describe -m'"
+assert_abbr_exists jjnm "'jj new main'"
+assert_abbr_exists jjc "'jj commit'"
+assert_abbr_exists jjci "'jj commit -i'"
 
 # Test git integration
-assert_abbr_exists "jjgp" "'jj git push'"
-assert_abbr_exists "jjgf" "'jj git fetch'"
-assert_abbr_exists "jjgic" "'jj git init --colocate'"
+assert_abbr_exists jjgp "'jj git push'"
+assert_abbr_exists jjgf "'jj git fetch'"
+assert_abbr_exists jjgic "'jj git init --colocate'"
 
 # Test short forms
-assert_abbr_exists "jp" "'jj git push'"
-assert_abbr_exists "jd" "'jj describe -m'"
-assert_abbr_exists "jc" "'jj commit'"
+assert_abbr_exists jp "'jj git push'"
+assert_abbr_exists jd "'jj describe -m'"
+assert_abbr_exists jc "'jj commit'"
 
 echo ""
 echo "Results: $pass_count/$test_count passed, $fail_count failed"
