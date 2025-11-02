@@ -1,2 +1,18 @@
+# Jujutsu internal files
 .jj
 
+# macOS
+.DS_Store
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Pre-commit
+.cache/
+
+# Node
+node_modules/

@@ -16,9 +16,9 @@ Fixes #(issue)
 
 ## Changes Made
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Testing
 
@@ -29,9 +29,9 @@ Fixes #(issue)
 
 ## Fish Environment
 
-- Fish version: 
-- jj version: 
-- Operating System: 
+- Fish version:
+- jj version:
+- Operating System:
 
 ## Checklist
 

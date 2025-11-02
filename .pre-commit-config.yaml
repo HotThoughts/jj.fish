@@ -1,0 +1,42 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+
+  # Fish shell syntax checking
+  - repo: local
+    hooks:
+      - id: fish-syntax-check
+        name: Fish Shell Syntax Check
+        entry: fish --no-execute
+        language: system
+        files: \.fish$
+
+      - id: fish-indent-check
+        name: Fish Shell Indent Check
+        entry: fish_indent --check
+        language: system
+        files: \.fish$
+
+  # Run tests
+  - repo: local
+    hooks:
+      - id: fish-tests
+        name: Run Fish Shell Tests
+        entry: fish tests/run_tests.fish
+        language: system
+        pass_filenames: false
+        always_run: true
+
+# Configuration
+default_install_hook_types: [pre-push]
+default_stages: [pre-push]
