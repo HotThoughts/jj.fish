@@ -56,13 +56,6 @@ abbr --add jjdu 'jj duplicate'
 abbr --add jjrv 'jj revert'
 abbr --add jjpa 'jj parallelize'
 
-# === Creating and Modifying Changes ===
-abbr --add jjnm 'jj new main' # Create new change based on main
-abbr --add jjnmo 'jj new main@origin' # Create new change based on origin/main
-abbr --add jjd 'jj describe' # Edit change description
-abbr --add jjdm 'jj describe -m' # Set change description with message
-abbr --add jja 'jj abandon' # Abandon a change
-
 # Alternative shorter abbreviations
 abbr --add ji 'jj git init --colocate'
 abbr --add jp 'jj git push'
