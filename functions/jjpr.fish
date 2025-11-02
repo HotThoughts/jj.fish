@@ -19,10 +19,6 @@ function jjpr --description "Push jj change and create GitHub PR"
 
     # Verify change exists and get description
     set -l title (jj log -r $change_id -T description --no-graph 2>/dev/null | head -1 | string trim)
-    if test $status -ne 0
-        echo "Error: invalid change-id '$change_id'" >&2
-        return 1
-    end
 
     if test -z "$title"
         set title "Update from jj change $change_id"
