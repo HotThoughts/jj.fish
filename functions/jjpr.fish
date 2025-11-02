@@ -3,10 +3,7 @@ function jjpr --description "Push jj change and create GitHub PR"
 
     # Validate input
     if test -z "$change_id"
-        echo "Error: change-id required" >&2
-        echo "Usage: jjpr <change-id>" >&2
-        echo "Example: jjpr abc123def" >&2
-        return 1
+        set change_id "@"
     end
 
     # Check required dependencies

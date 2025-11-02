@@ -49,11 +49,13 @@ function test_abbreviations
     echo "🔧 Testing abbreviations..."
 
     echo "Testing jj abbreviations are loaded:"
-    abbr --show | grep -E "^abbr jj" | head -5
+    set -l abbr_count (abbr --show | grep -E "^abbr jj" | wc -l | string trim)
+    echo "Found $abbr_count jj abbreviations"
+    abbr --show | grep -E "^abbr jj" | head -10
     echo ""
 
     echo "Testing alternative abbreviations are loaded:"
-    abbr --show | grep -E "^abbr j[gd]" | head -3
+    abbr --show | grep -E "^abbr j[gdcri]" | head -5
     echo ""
 end
 
@@ -88,8 +90,19 @@ function test_jj_commands
     jjll 3
     echo ""
 
-    echo "Testing jj describe:"
-    echo "Would run: jjdm 'test commit message'"
+    echo "Testing jj show:"
+    jjs @
+    echo ""
+
+    echo "Testing new abbreviations exist:"
+    echo "Core: jjn, jjr, jjc, jjci, jja"
+    echo "Viewing: jjs, jjdf, jjid, jjev"
+    echo "Editing: jje, jjsq, jjsp, jjde, jjab"
+    echo "Navigation: jjnx, jjpv"
+    echo "Bookmarks: jjb, jjbl, jjbs, jjbt, jjbd"
+    echo "Operations: jjop, jjopl, jju"
+    echo "Resolution: jjrs, jjrt"
+    echo "Advanced: jjdu, jjrv, jjpa"
     echo ""
 end
 
