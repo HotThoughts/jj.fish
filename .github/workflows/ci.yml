@@ -34,8 +34,12 @@ jobs:
             # Test that abbreviation files can be sourced without errors
             source functions/abbr.fish
             echo 'Abbreviation file loaded successfully'
-            
+
             # Test that conf.d file has valid syntax (skip interactive check)
             fish -c 'set -l original_status (status is-interactive); source conf.d/jj.fish; true'
             echo 'Configuration file is valid'
           "
+
+      - name: Run automated tests
+        run: |
+          fish tests/run_tests.fish
