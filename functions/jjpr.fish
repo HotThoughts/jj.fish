@@ -34,8 +34,6 @@ function jjpr --description "Push jj change and create GitHub PR"
         return 1
     end
 
-    echo "$push_output"
-
     # Extract branch name from push output using string operations
     # Match patterns like "Creating bookmark push-abcdef" or "Move sideways bookmark foo"
     set -l branch_name ""
@@ -77,14 +75,15 @@ function jjpr --description "Push jj change and create GitHub PR"
         set default_branch main
     end
 
-    # Create GitHub PR
-    echo "Creating PR: $title"
-    echo "Branch: $branch_name -> $default_branch"
+    # Display push summary (filter out verbose output)
+    echo ""
+    echo "✓ Pushed change to remote"
+    echo "  Branch: $branch_name"
+    echo ""
 
+    # Create GitHub PR
     if not gh pr create --base "$default_branch" --head "$branch_name" --title "$title" --assignee @me
         echo "Error: failed to create PR" >&2
         return 1
     end
-
-    echo "Successfully created PR"
 end
