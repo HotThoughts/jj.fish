@@ -38,13 +38,10 @@ assert_abbr_exists jjnm "'jj new main'"
 assert_abbr_exists jjc "'jj commit'"
 assert_abbr_exists jjci "'jj commit -i'"
 
-# Test git integration
-assert_abbr_exists jjgp "'jj git push'"
-assert_abbr_exists jjgf "'jj git fetch'"
-assert_abbr_exists jjgic "'jj git init --colocate'"
-
 # Test short forms
 assert_abbr_exists jp "'jj git push'"
+assert_abbr_exists jf "'jj git fetch'"
+assert_abbr_exists ji "'jj git init --colocate .'"
 assert_abbr_exists jd "'jj describe -m'"
 assert_abbr_exists jc "'jj commit'"
 

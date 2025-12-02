@@ -73,18 +73,11 @@ fisher install HotThoughts/jj.fish
 | `jjdu` | `jj duplicate`   | `jjrv` | `jj revert` |
 | `jjpa` | `jj parallelize` |        |             |
 
-### Git Integration
-
-| Abbr    | Command                  | Abbr   | Command        |
-| ------- | ------------------------ | ------ | -------------- |
-| `jjgic` | `jj git init --colocate` | `jjgp` | `jj git push`  |
-| `jjgpc` | `jj git push --change`   | `jjgf` | `jj git fetch` |
-
 ### Short Alternatives
 
 | Abbr  | Command                    | Abbr  | Command             |
 | ----- | -------------------------- | ----- | ------------------- |
-| `ji`  | `jj git init --colocate`   | `jp`  | `jj git push`       |
+| `ji`  | `jj git init --colocate .`   | `jp`  | `jj git push`       |
 | `jf`  | `jj git fetch`             | `jd`  | `jj describe -m`    |
 | `jr`  | `jj rebase -d main@origin` | `jc`  | `jj commit`         |
 | `jci` | `jj commit -i`             | `jbt` | `jj bookmark track` |
@@ -100,7 +93,7 @@ fisher install HotThoughts/jj.fish
 
 ```fish
 # Initialize repo and start working
-jjgic
+ji
 jjst
 
 # Create new change, make edits, describe

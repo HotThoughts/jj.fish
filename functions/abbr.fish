@@ -57,7 +57,7 @@ abbr --add jjrv 'jj revert'
 abbr --add jjpa 'jj parallelize'
 
 # Alternative shorter abbreviations
-abbr --add ji 'jj git init --colocate'
+abbr --add ji 'jj git init --colocate .'
 abbr --add jp 'jj git push'
 abbr --add jf 'jj git fetch'
 abbr --add jd 'jj describe -m'
