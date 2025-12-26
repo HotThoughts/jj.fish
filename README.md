@@ -83,6 +83,36 @@ fisher install HotThoughts/jj.fish
 | `jci` | `jj commit -i`             | `jbt` | `jj bookmark track` |
 | `jbs` | `jj bookmark set`          |       |                     |
 
+### AI-Powered Commit Messages
+
+| Function | Description                                              |
+| -------- | -------------------------------------------------------- |
+| `jjad`   | AI-generated description via `jj describe` |
+| `jjac`   | AI-generated commit via `jj commit` |
+
+Uses AI to analyze your changes and generate conventional commit messages.
+
+**Supported AI tools** (auto-detected):
+- GitHub Copilot standalone (`copilot`)
+- Cursor Agent (`cursor-agent`)
+- Claude CLI (`claude`)
+
+**Usage:**
+```fish
+# If only one AI tool is installed, it's used automatically
+jjad
+
+# If multiple tools are available, you'll get an interactive selection:
+# Multiple AI tools detected. Select one:
+#   1) copilot
+#   2) cursor-agent
+#   3) claude
+# Choice [1-3]: 
+
+# Or set a preferred tool via environment variable
+set -Ux JJ_AI_TOOL copilot  # Options: copilot, cursor-agent, claude
+```
+
 ### PR Creation
 
 | Function           | Description                                        |
