@@ -24,7 +24,7 @@ function jjad --description "AI-powered jj description generator (supports copil
     echo "$changes" >$input_file
 
     # Generate commit message using selected AI tool in background
-    fish -c "set tool $tool; source functions/__jj_ai_commit_message.fish; __jj_ai_commit_message (cat $input_file) > $output_file" &
+    fish -c "set tool $tool; cat $input_file | __jj_ai_commit_message > $output_file" &
     set -l bg_pid $last_pid
 
     # Show spinner while waiting

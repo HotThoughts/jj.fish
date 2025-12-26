@@ -7,7 +7,7 @@ function jjac --description "AI-powered jj commit (supports copilot, cursor-agen
         return 1
     end
 
-    # Select AI tool first (before spinner)
+    # Select AI tool first
     set -l tool
     if set -q JJ_AI_TOOL
         set tool $JJ_AI_TOOL
@@ -24,7 +24,7 @@ function jjac --description "AI-powered jj commit (supports copilot, cursor-agen
     echo "$changes" >$input_file
 
     # Generate commit message using selected AI tool in background
-    fish -c "set tool $tool; source functions/__jj_ai_commit_message.fish; __jj_ai_commit_message (cat $input_file) > $output_file" &
+    fish -c "set tool $tool; cat $input_file | __jj_ai_commit_message > $output_file" &
     set -l bg_pid $last_pid
 
     # Show spinner while waiting
