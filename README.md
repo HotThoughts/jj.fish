@@ -284,7 +284,7 @@ pre-commit run --hook-stage pre-push --all-files
 
 **Integration with jj:**
 
-Since jj doesn't natively trigger git hooks (see [jj issue #405](https://github.com/jj-vcs/jj/issues/405)), you can configure a `jj push` alias that runs pre-commit checks before pushing.
+Since jj doesn't natively trigger git hooks (see [jj issue #405](https://github.com/jj-vcs/jj/issues/405)), you can configure a jj alias to run pre-commit checks on jj-tracked changed files.
 
 **Setup (one-time):**
 
@@ -292,23 +292,21 @@ Add this alias to `.jj/repo/config.toml`:
 
 ```toml
 [aliases]
-push = [
+pre-commit = [
   "util",
   "exec",
   "--",
-  "bash",
+  "fish",
   "-c",
-  "files=$(jj log -r 'main@origin..@' --no-graph --summary 2>/dev/null | grep -E '^[MAD] ' | awk '{print $2}' | sort -u | tr '\n' ' '); if [ -n \"$files\" ]; then pre-commit run --hook-stage pre-push --files $files && jj git push \"$@\"; else jj git push \"$@\"; fi",
-  "--",
+  "jj diff -r @ --name-only --no-pager | xargs pre-commit run --files",
 ]
 ```
 
-This alias runs pre-commit checks only on files changed in your commits (using `jj log -r 'main@origin..@'`), making it fast and efficient.
+This alias runs pre-commit checks only on files changed in your current change (using `jj diff -r @ --name-only`), making it fast and efficient.
 
 **Usage:**
 ```fish
-jj push           # Runs pre-commit checks on changed files, then pushes
-jj git push       # Bypasses checks (direct git push)
+jj pre-commit     # Runs pre-commit checks on changed files in current change
 ```
 
 **Manual runs (all files):**
@@ -319,8 +317,7 @@ pre-commit run --hook-stage pre-push --all-files
 **Manual runs (changed files only, using jj):**
 ```fish
 # Get changed files from jj and run pre-commit on them
-files=$(jj log -r 'main@origin..@' --no-graph --summary | grep -E '^[MAD] ' | awk '{print $2}' | sort -u)
-pre-commit run --hook-stage pre-push --files $files
+jj diff -r @ --name-only --no-pager | xargs pre-commit run --files
 ```
 
 ## License
