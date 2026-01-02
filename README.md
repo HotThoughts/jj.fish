@@ -77,11 +77,11 @@ fisher install HotThoughts/jj.fish
 
 | Abbr  | Command                    | Abbr  | Command             |
 | ----- | -------------------------- | ----- | ------------------- |
-| `ji`  | `jj git init --colocate .`   | `jp`  | `jj git push`       |
-| `jf`  | `jj git fetch`             | `jd`  | `jj describe -m`    |
-| `jr`  | `jj rebase -d main@origin` | `jc`  | `jj commit`         |
-| `jci` | `jj commit -i`             | `jbt` | `jj bookmark track` |
-| `jbs` | `jj bookmark set`          |       |                     |
+| `ji`  | `jj git init --colocate .` | `jp`  | `jj git push`             |
+| `jf`  | `jj git fetch`             | `jnm` | `jj new main@origin`      |
+| `jd`  | `jj describe -m`           | `jr`  | `jj rebase -d main@origin`|
+| `jc`  | `jj commit`                | `jci` | `jj commit -i`            |
+| `jbt` | `jj bookmark track`        | `jbs` | `jj bookmark set`         |
 
 ### AI-Powered Commit Messages
 
@@ -107,7 +107,7 @@ jjad
 #   1) copilot
 #   2) cursor-agent
 #   3) claude
-# Choice [1-3]: 
+# Choice [1-3]:
 
 # Or set a preferred tool via environment variable
 set -Ux JJ_AI_TOOL copilot  # Options: copilot, cursor-agent, claude
