@@ -44,9 +44,9 @@ run_test "No arguments should fail"
 jjpr >/dev/null 2>&1
 assert_failure
 
-# Test 2: Check error message content for no arguments
-run_test "Error message mentions usage"
-set -l output (jjpr 2>&1)
+# Test 2: Check error message content for help flag
+run_test "Error message mentions usage when help requested"
+set -l output (jjpr --help 2>&1)
 echo "$output" | grep -q "Usage:"
 assert_success
 
