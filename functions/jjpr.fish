@@ -1,9 +1,28 @@
 function jjpr --description "Push jj change and create GitHub PR"
-    set -l change_id $argv[1]
+    # Parse arguments
+    set -l change_id "@"
+    set -l gh_args
 
-    # Validate input
-    if test -z "$change_id"
-        set change_id "@"
+    if test (count $argv) -gt 0
+        set -l first_arg $argv[1]
+        if test "$first_arg" = -h -o "$first_arg" = --help
+            echo "Usage: jjpr [change_id] [gh_pr_create_flags...]"
+            echo ""
+            echo "Arguments:"
+            echo "  change_id             The jj change to push (default: @)"
+            echo "  gh_pr_create_flags    Flags passed to 'gh pr create'"
+            return 0
+        end
+
+        # Check if first arg starts with - (flag)
+        if string match -q -r "^-" -- "$first_arg"
+            set gh_args $argv
+        else
+            set change_id $first_arg
+            if test (count $argv) -gt 1
+                set gh_args $argv[2..-1]
+            end
+        end
     end
 
     # Check required dependencies
@@ -81,8 +100,8 @@ function jjpr --description "Push jj change and create GitHub PR"
     echo "  Branch: $branch_name"
     echo ""
 
-    # Create GitHub PR
-    if not gh pr create --base "$default_branch" --head "$branch_name" --title "$title" --assignee @me
+    # Create GitHub PR with extra args
+    if not gh pr create --base "$default_branch" --head "$branch_name" --title "$title" --assignee @me $gh_args
         echo "Error: failed to create PR" >&2
         return 1
     end
