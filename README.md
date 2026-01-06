@@ -1,4 +1,4 @@
-# jj.fish 🌿
+# jj.fish
 
 Fish shell abbreviations for [jj (Jujutsu)](https://github.com/martinvonz/jj) - fast shortcuts for common operations.
 
@@ -87,31 +87,71 @@ fisher install HotThoughts/jj.fish
 
 | Function | Description                                              |
 | -------- | -------------------------------------------------------- |
-| `jjad`   | AI-generated description via `jj describe` |
-| `jjac`   | AI-generated commit via `jj commit` |
+| `jjad`   | AI-generated description via `jj describe`              |
+| `jjac`   | AI-generated commit via `jj commit`                     |
 
-Uses AI to analyze your changes and generate conventional commit messages.
+Automatically generates conventional commit messages by analyzing your changes using direct API calls. Fast and reliable (typically 1-3 seconds).
 
-**Supported AI tools** (auto-detected):
-- GitHub Copilot standalone (`copilot`)
-- Cursor Agent (`cursor-agent`)
-- Claude CLI (`claude`)
+**Features:**
+- Fast: Direct API calls (1-3s vs 5-15s with agent tools)
+- Smart: Analyzes diffs and generates conventional commit messages
+- Auto-detection: Automatically uses available API keys
+- Configurable: Customize models and providers
+- Optimized: Automatically truncates large diffs to stay within token limits
+
+**Supported AI providers:**
+- **OpenAI** (`openai`) - Fast and cost-effective option
+- **Anthropic** (`anthropic`) - High-quality Claude models
+- **DeepSeek** (`deepseek`) - Cost-effective alternative
+
+**Setup:**
+
+First, get an API key from one or more providers:
+- OpenAI: https://platform.openai.com/api-keys
+- Anthropic: https://console.anthropic.com/settings/keys
+- DeepSeek: https://platform.deepseek.com/api_keys
+
+Then set the API key(s) in your Fish shell (these persist across sessions):
+```fish
+set -Ux OPENAI_API_KEY "sk-..."
+# or
+set -Ux ANTHROPIC_API_KEY "sk-ant-..."
+# or
+set -Ux DEEPSEEK_API_KEY "sk-..."
+```
+
+You can customize the model if you want:
+```fish
+set -Ux JJ_AI_OPENAI_MODEL "gpt-4o-mini"              # Default: gpt-4o-mini
+set -Ux JJ_AI_ANTHROPIC_MODEL "claude-3-5-haiku-20241022"  # Default: claude-3-5-haiku-20241022
+set -Ux JJ_AI_DEEPSEEK_MODEL "deepseek-chat"          # Default: deepseek-chat
+```
+
+If you have multiple providers set up, you can skip the selection prompt by setting a preferred one:
+```fish
+set -Ux JJ_AI_TOOL openai  # Options: openai, anthropic, deepseek
+```
 
 **Usage:**
+
 ```fish
-# If only one AI tool is installed, it's used automatically
+# Generate and set description (with confirmation)
 jjad
 
-# If multiple tools are available, you'll get an interactive selection:
-# Multiple AI tools detected. Select one:
-#   1) copilot
-#   2) cursor-agent
-#   3) claude
-# Choice [1-3]:
+# Generate and commit (with confirmation)
+jjac
 
-# Or set a preferred tool via environment variable
-set -Ux JJ_AI_TOOL copilot  # Options: copilot, cursor-agent, claude
+# If multiple providers are available, you'll get an interactive selection:
+# Multiple AI providers detected. Select one:
+#   1) openai
+#   2) anthropic
+#   3) deepseek
+# Choice [1-3]:
 ```
+
+**How it works:**
+
+When you run `jjad` or `jjac`, it analyzes your current changes using `jj diff`, sends the diff to your selected AI provider, generates a conventional commit message, shows you a preview for confirmation, and then applies it via `jj describe` or `jj commit`.
 
 ### PR Creation
 
@@ -159,7 +199,7 @@ abbr --erase jjnm
 
 ### "jj not found" error
 
-The plugin requires jj to be installed and in your PATH.
+Make sure jj is installed and in your PATH.
 
 **Install jj:**
 
@@ -179,7 +219,7 @@ jj --version
 
 ### "gh CLI not found" when using jjpr
 
-The `jjpr` function requires the GitHub CLI to create pull requests.
+You'll need the GitHub CLI installed to use `jjpr`.
 
 **Install gh:**
 
@@ -199,50 +239,85 @@ gh auth login
 
 ### Abbreviations not working
 
-1. **Check plugin is loaded:**
+First, check if the plugin is loaded:
+```fish
+abbr --show | grep jj
+```
+This should show your jj abbreviations.
 
-   ```fish
-   abbr --show | grep jj
-   ```
+If not, try reloading your Fish config:
+```fish
+source ~/.config/fish/config.fish
+```
 
-   Should show jj abbreviations.
-
-2. **Reload Fish config:**
-
-   ```fish
-   source ~/.config/fish/config.fish
-   ```
-
-3. **Reinstall plugin:**
-   ```fish
-   fisher remove HotThoughts/jj.fish
-   fisher install HotThoughts/jj.fish
-   ```
+If that doesn't work, reinstall the plugin:
+```fish
+fisher remove HotThoughts/jj.fish
+fisher install HotThoughts/jj.fish
+```
 
 ### jjpr fails with "could not determine branch name"
 
-This occurs when jj doesn't output the expected branch name format after pushing.
-
-**Workaround:**
+Sometimes jj doesn't output the branch name in the expected format after pushing. If this happens:
 
 1. Push manually: `jj git push -c <change-id>`
-2. Note the branch name from output
-3. Create PR manually: `gh pr create --head <branch-name>`
+2. Note the branch name from the output
+3. Create the PR manually: `gh pr create --head <branch-name>`
 
-**Report:** If this happens consistently, please file an issue with your jj version (`jj --version`).
+If this happens consistently, please file an issue with your jj version (`jj --version`).
 
 ### Using repositories with non-"main" default branches
 
-The `jjpr` function automatically detects your repository's default branch (main, master, develop, etc.) and creates PRs against it. No configuration needed.
+The `jjpr` function automatically detects your repository's default branch (main, master, develop, etc.) and creates PRs against it. You don't need to configure anything.
 
 ### Change ID not found
 
-Ensure you're using a valid change ID from `jj log`:
+Make sure you're using a valid change ID from `jj log`:
 
 ```fish
 jjl              # View change history
 jjpr abc123def   # Use the change ID prefix (first 7-12 chars)
 ```
+
+### AI commit message generation fails
+
+**"No AI API keys found" error:**
+
+You need to set at least one API key:
+```fish
+set -Ux OPENAI_API_KEY "sk-..."
+# or
+set -Ux ANTHROPIC_API_KEY "sk-ant-..."
+# or
+set -Ux DEEPSEEK_API_KEY "sk-..."
+```
+
+**"API request failed" error:**
+
+First, check that your API key is valid:
+```fish
+echo $OPENAI_API_KEY  # Should show your key
+```
+
+Then test network connectivity:
+```fish
+curl -I https://api.openai.com/v1/models  # Test OpenAI
+curl -I https://api.anthropic.com/v1/messages  # Test Anthropic
+curl -I https://api.deepseek.com/v1/models  # Test DeepSeek
+```
+
+Also make sure your API key has access to chat completions/messages endpoints. If you hit rate limits, wait a moment and try again, or use a different provider.
+
+**"Failed to parse API response" error:**
+
+This usually means there's an API error. Check that:
+- Your API key is correct and has sufficient credits
+- The model name is valid (if you customized `JJ_AI_*_MODEL`)
+- The API service is operational
+
+**Slow performance:**
+
+The feature uses direct API calls and should be fast (1-3 seconds). If it's slow, check your internet connection. Large diffs are automatically truncated, but very large repos may still be slow. You can also try a different provider since some are faster than others.
 
 ## Development
 
@@ -263,8 +338,8 @@ pre-commit install --hook-type pre-push
 
 **What gets checked:**
 
-- Fish shell syntax validation (`fish --no-execute`)
-- Fish shell indentation (`fish_indent --check`)
+- Fish shell syntax validation
+- Fish shell indentation
 - Trailing whitespace and end-of-file fixes
 - YAML validity
 - Test suite execution
@@ -302,7 +377,7 @@ pre-commit = [
 ]
 ```
 
-This alias runs pre-commit checks only on files changed in your current change (using `jj diff -r @ --name-only`), making it fast and efficient.
+This alias runs pre-commit checks only on files changed in your current change, making it fast and efficient.
 
 **Usage:**
 ```fish

@@ -1,11 +1,14 @@
-function __jj_ai_select_tool --description "Interactive AI tool selector"
+function __jj_ai_select_tool --description "Interactive AI provider selector"
     set -l tools (__jj_ai_detect_tools)
 
     if test (count $tools) -eq 0
-        echo (set_color red)"✗ No AI tools found. Please install one:"(set_color normal) >&2
-        echo "  - copilot: https://github.com/github/copilot-cli" >&2
-        echo "  - cursor-agent: https://cursor.sh" >&2
-        echo "  - claude: https://claude.ai/cli" >&2
+        echo (set_color red)"✗ No AI API keys found. Please set one:"(set_color normal) >&2
+        echo "  - OpenAI: export OPENAI_API_KEY='your-key'" >&2
+        echo "    Get key: https://platform.openai.com/api-keys" >&2
+        echo "  - Anthropic: export ANTHROPIC_API_KEY='your-key'" >&2
+        echo "    Get key: https://console.anthropic.com/settings/keys" >&2
+        echo "  - DeepSeek: export DEEPSEEK_API_KEY='your-key'" >&2
+        echo "    Get key: https://platform.deepseek.com/api_keys" >&2
         return 1
     end
 
@@ -14,8 +17,8 @@ function __jj_ai_select_tool --description "Interactive AI tool selector"
         return 0
     end
 
-    # Multiple tools available - show selection menu
-    echo (set_color cyan)"🤖 Multiple AI tools detected. Select one:"(set_color normal) >&2
+    # Multiple providers available - show selection menu
+    echo (set_color cyan)"🤖 Multiple AI providers detected. Select one:"(set_color normal) >&2
     for i in (seq (count $tools))
         echo (set_color yellow)"$i."(set_color normal) "$tools[$i]" >&2
     end
