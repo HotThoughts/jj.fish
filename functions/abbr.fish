@@ -5,12 +5,14 @@
 abbr --add jjl 'jj log'
 abbr --add jjll 'jj log --limit'
 abbr --add jjlr 'jj log --revisions'
+abbr --add jjlu "jj log -r 'remote_branches()..@'"
 abbr --add jjst 'jj st'
 abbr --add jjd 'jj describe'
 abbr --add --set-cursor='%' -- jjdm 'jj describe -m "%"'
 abbr --add jjn 'jj new'
 abbr --add jjnm 'jj new main'
 abbr --add jjnmo 'jj new main@origin'
+abbr --add --set-cursor='%' -- jjnc 'jj new -m "%"'
 abbr --add jja 'jj abandon'
 abbr --add jjr 'jj rebase'
 abbr --add jjrmo 'jj rebase -d main@origin'
@@ -27,6 +29,7 @@ abbr --add jjev 'jj evolog'
 abbr --add jje 'jj edit'
 abbr --add jjsq 'jj squash'
 abbr --add jjsqi 'jj squash -i'
+abbr --add jjsqp 'jj squash --into @-'
 abbr --add jjsp 'jj split'
 abbr --add jjde 'jj diffedit'
 abbr --add jjab 'jj absorb'
@@ -41,6 +44,7 @@ abbr --add jjbl 'jj bookmark list'
 abbr --add jjbs 'jj bookmark set'
 abbr --add jjbt 'jj bookmark track'
 abbr --add jjbd 'jj bookmark delete'
+abbr --add jjbc 'jj bookmark create'
 
 # Operations
 abbr --add jjop 'jj op'
@@ -50,6 +54,12 @@ abbr --add jju 'jj undo'
 # Conflict resolution
 abbr --add jjrs 'jj resolve'
 abbr --add jjrt 'jj restore'
+
+# Workspaces
+abbr --add jjw 'jj workspace'
+abbr --add jjwl 'jj workspace list'
+abbr --add jjwa 'jj workspace add'
+abbr --add jjwf 'jj workspace forget'
 
 # Advanced operations
 abbr --add jjdu 'jj duplicate'
@@ -67,3 +77,4 @@ abbr --add jc 'jj commit'
 abbr --add jci 'jj commit -i'
 abbr --add jbt 'jj bookmark track'
 abbr --add jbs 'jj bookmark set'
+abbr --add jbc 'jj bookmark create'

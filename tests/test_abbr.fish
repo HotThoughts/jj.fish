@@ -38,12 +38,17 @@ assert_abbr_exists jjnm "'jj new main'"
 assert_abbr_exists jjc "'jj commit'"
 assert_abbr_exists jjci "'jj commit -i'"
 
+# Test new abbreviations
+assert_abbr_exists jjbc "'jj bookmark create'"
+assert_abbr_exists jjsqp "'jj squash --into @-'"
+
 # Test short forms
 assert_abbr_exists jp "'jj git push'"
 assert_abbr_exists jf "'jj git fetch'"
 assert_abbr_exists ji "'jj git init --colocate .'"
 assert_abbr_exists jd "'jj describe -m'"
 assert_abbr_exists jc "'jj commit'"
+assert_abbr_exists jbc "'jj bookmark create'"
 
 echo ""
 echo "Results: $pass_count/$test_count passed, $fail_count failed"
