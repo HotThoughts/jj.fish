@@ -16,13 +16,14 @@ fisher install HotThoughts/jj.fish
 
 | Abbr    | Command              | Abbr    | Command                    |
 | ------- | -------------------- | ------- | -------------------------- |
-| `jjl`   | `jj log`             | `jjst`  | `jj st`                    |
-| `jjll`  | `jj log --limit`     | `jjlr`  | `jj log --revisions`       |
-| `jjd`   | `jj describe`        | `jjdm`  | `jj describe -m`           |
-| `jjn`   | `jj new`             | `jjnm`  | `jj new main`              |
-| `jjnmo` | `jj new main@origin` | `jja`   | `jj abandon`               |
-| `jjr`   | `jj rebase`          | `jjrmo` | `jj rebase -d main@origin` |
-| `jjc`   | `jj commit`          | `jjci`  | `jj commit -i`             |
+| `jjl`   | `jj log`             | `jjst`  | `jj st`                                    |
+| `jjll`  | `jj log --limit`     | `jjlr`  | `jj log --revisions`                       |
+| `jjlu`  | `jj log -r 'remote_branches()..@'` | `jjd` | `jj describe`               |
+| `jjdm`  | `jj describe -m`     | `jjn`   | `jj new`                                   |
+| `jjnm`  | `jj new main`        | `jjnmo` | `jj new main@origin`                       |
+| `jjnc`  | `jj new -m`          | `jja`   | `jj abandon`                               |
+| `jjr`   | `jj rebase`          | `jjrmo` | `jj rebase -d main@origin`                 |
+| `jjc`   | `jj commit`          | `jjci`  | `jj commit -i`                             |
 
 ### Viewing and Comparing
 
@@ -35,9 +36,10 @@ fisher install HotThoughts/jj.fish
 
 | Abbr    | Command        | Abbr   | Command     |
 | ------- | -------------- | ------ | ----------- |
-| `jje`   | `jj edit`      | `jjsq` | `jj squash` |
-| `jjsqi` | `jj squash -i` | `jjsp` | `jj split`  |
-| `jjde`  | `jj diffedit`  | `jjab` | `jj absorb` |
+| `jje`   | `jj edit`               | `jjsq`  | `jj squash`          |
+| `jjsqi` | `jj squash -i`          | `jjsqp` | `jj squash --into @-`|
+| `jjsp`  | `jj split`              | `jjde`  | `jj diffedit`        |
+| `jjab`  | `jj absorb`             |         |                      |
 
 ### Navigation
 
@@ -49,9 +51,9 @@ fisher install HotThoughts/jj.fish
 
 | Abbr   | Command              | Abbr   | Command             |
 | ------ | -------------------- | ------ | ------------------- |
-| `jjb`  | `jj bookmark`        | `jjbl` | `jj bookmark list`  |
-| `jjbs` | `jj bookmark set`    | `jjbt` | `jj bookmark track` |
-| `jjbd` | `jj bookmark delete` |        |                     |
+| `jjb`  | `jj bookmark`        | `jjbl` | `jj bookmark list`   |
+| `jjbs` | `jj bookmark set`    | `jjbt` | `jj bookmark track`  |
+| `jjbd` | `jj bookmark delete` | `jjbc` | `jj bookmark create` |
 
 ### Operations
 
@@ -65,6 +67,13 @@ fisher install HotThoughts/jj.fish
 | Abbr   | Command      | Abbr   | Command      |
 | ------ | ------------ | ------ | ------------ |
 | `jjrs` | `jj resolve` | `jjrt` | `jj restore` |
+
+### Workspaces
+
+| Abbr   | Command                | Abbr   | Command               |
+| ------ | ---------------------- | ------ | --------------------- |
+| `jjw`  | `jj workspace`         | `jjwl` | `jj workspace list`   |
+| `jjwa` | `jj workspace add`     | `jjwf` | `jj workspace forget` |
 
 ### Advanced Operations
 
@@ -82,6 +91,7 @@ fisher install HotThoughts/jj.fish
 | `jd`  | `jj describe -m`           | `jr`  | `jj rebase -d main@origin`|
 | `jc`  | `jj commit`                | `jci` | `jj commit -i`            |
 | `jbt` | `jj bookmark track`        | `jbs` | `jj bookmark set`         |
+| `jbc` | `jj bookmark create`       |       |                           |
 
 ### AI-Powered Commit Messages
 
