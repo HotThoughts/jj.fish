@@ -21,9 +21,9 @@ repos:
         language: system
         files: \.fish$
 
-      - id: fish-indent-check
-        name: Fish Shell Indent Check
-        entry: fish_indent --check
+      - id: fish-indent-fix
+        name: Fish Shell Indent Fix
+        entry: fish_indent -w
         language: system
         files: \.fish$
 
@@ -38,5 +38,5 @@ repos:
         always_run: true
 
 # Configuration
-default_install_hook_types: [pre-push]
-default_stages: [pre-push]
+default_install_hook_types: [pre-commit]
+default_stages: [pre-commit]
