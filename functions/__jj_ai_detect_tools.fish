@@ -1,16 +1,13 @@
-function __jj_ai_detect_tools --description "Detect available AI API providers"
-    # Check for OpenAI API key
-    if set -q OPENAI_API_KEY; and test -n "$OPENAI_API_KEY"
-        echo openai
+function __jj_ai_detect_tools --description "Detect available AI CLI tools"
+    if command -q copilot
+        echo copilot
     end
 
-    # Check for Anthropic API key
-    if set -q ANTHROPIC_API_KEY; and test -n "$ANTHROPIC_API_KEY"
-        echo anthropic
+    if command -q cursor-agent
+        echo cursor-agent
     end
 
-    # Check for DeepSeek API key
-    if set -q DEEPSEEK_API_KEY; and test -n "$DEEPSEEK_API_KEY"
-        echo deepseek
+    if command -q claude
+        echo claude
     end
 end

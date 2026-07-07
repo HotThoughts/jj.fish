@@ -1,4 +1,4 @@
-function jjad --description "AI-powered jj description generator (uses OpenAI/Anthropic/DeepSeek API)"
+function jjad --description "AI-powered jj description generator (uses your AI CLI tool)"
     # Get the current diff
     set -l changes (jj diff --git 2>/dev/null; or jj diff)
 
@@ -37,7 +37,7 @@ function jjad --description "AI-powered jj description generator (uses OpenAI/An
     # Run API call in background
     # Using a block inherits all functions and variables from the current session
     begin
-        __jj_ai_commit_message < $input_file
+        __jj_ai_commit_message <$input_file
     end >$output_file 2>&1 &
     set -l bg_pid $last_pid
 

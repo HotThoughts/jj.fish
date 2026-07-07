@@ -9,7 +9,7 @@ function __jj_ai_spinner --description "Show a loading spinner while running a c
     set -l frame_count (count $frames)
     set -l i 1
     set -l elapsed_ticks 0
-    set -l timeout_ticks (math "$timeout_seconds * 10")  # Convert to 0.1s ticks
+    set -l timeout_ticks (math "$timeout_seconds * 10") # Convert to 0.1s ticks
 
     # Hide cursor
     echo -n (tput civis) >&2

@@ -90,46 +90,26 @@ fisher install HotThoughts/jj.fish
 | `jjad`   | AI-generated description via `jj describe`              |
 | `jjac`   | AI-generated commit via `jj commit`                     |
 
-Automatically generates conventional commit messages by analyzing your changes using direct API calls. Fast and reliable (typically 1-3 seconds).
+Automatically generates conventional commit messages by piping your diff to whichever AI CLI tool you already have installed and authenticated — no separate API keys required.
 
 **Features:**
-- Fast: Direct API calls (1-3s vs 5-15s with agent tools)
+- No extra setup: reuses your existing CLI login (Copilot, Cursor, or Claude)
 - Smart: Analyzes diffs and generates conventional commit messages
-- Auto-detection: Automatically uses available API keys
-- Configurable: Customize models and providers
-- Optimized: Automatically truncates large diffs to stay within token limits
+- Auto-detection: Picks the tool automatically, or lets you choose if more than one is available
+- Responsive: Shows a spinner while generating, with a 10s timeout so it never hangs
 
-**Supported AI providers:**
-- **OpenAI** (`openai`) - Fast and cost-effective option
-- **Anthropic** (`anthropic`) - High-quality Claude models
-- **DeepSeek** (`deepseek`) - Cost-effective alternative
+**Supported AI CLI tools:**
+- **GitHub Copilot CLI** (`copilot`) - https://github.com/github/copilot-cli
+- **Cursor Agent CLI** (`cursor-agent`) - https://cursor.com/cli
+- **Claude Code CLI** (`claude`) - https://claude.com/claude-code
 
 **Setup:**
 
-First, get an API key from one or more providers:
-- OpenAI: https://platform.openai.com/api-keys
-- Anthropic: https://console.anthropic.com/settings/keys
-- DeepSeek: https://platform.deepseek.com/api_keys
+Install and authenticate at least one of the CLI tools above, following that tool's own login flow. jj.fish auto-detects whichever ones are on your `$PATH`.
 
-Then set the API key(s) in your Fish shell (these persist across sessions):
+If you have more than one installed, you can skip the selection prompt by setting a preferred one:
 ```fish
-set -Ux OPENAI_API_KEY "sk-..."
-# or
-set -Ux ANTHROPIC_API_KEY "sk-ant-..."
-# or
-set -Ux DEEPSEEK_API_KEY "sk-..."
-```
-
-You can customize the model if you want:
-```fish
-set -Ux JJ_AI_OPENAI_MODEL "gpt-4o-mini"              # Default: gpt-4o-mini
-set -Ux JJ_AI_ANTHROPIC_MODEL "claude-3-5-haiku-20241022"  # Default: claude-3-5-haiku-20241022
-set -Ux JJ_AI_DEEPSEEK_MODEL "deepseek-chat"          # Default: deepseek-chat
-```
-
-If you have multiple providers set up, you can skip the selection prompt by setting a preferred one:
-```fish
-set -Ux JJ_AI_TOOL openai  # Options: openai, anthropic, deepseek
+set -Ux JJ_AI_TOOL claude  # Options: copilot, cursor-agent, claude
 ```
 
 **Usage:**
@@ -141,17 +121,17 @@ jjad
 # Generate and commit (with confirmation)
 jjac
 
-# If multiple providers are available, you'll get an interactive selection:
-# Multiple AI providers detected. Select one:
-#   1) openai
-#   2) anthropic
-#   3) deepseek
+# If multiple tools are available, you'll get an interactive selection:
+# Multiple AI tools detected. Select one:
+#   1) copilot
+#   2) cursor-agent
+#   3) claude
 # Choice [1-3]:
 ```
 
 **How it works:**
 
-When you run `jjad` or `jjac`, it analyzes your current changes using `jj diff`, sends the diff to your selected AI provider, generates a conventional commit message, shows you a preview for confirmation, and then applies it via `jj describe` or `jj commit`.
+When you run `jjad` or `jjac`, it analyzes your current changes using `jj diff`, pipes the diff to your selected AI CLI tool, generates a conventional commit message, shows you a preview for confirmation, and then applies it via `jj describe` or `jj commit`.
 
 ### PR Creation
 
@@ -281,43 +261,20 @@ jjpr abc123def   # Use the change ID prefix (first 7-12 chars)
 
 ### AI commit message generation fails
 
-**"No AI API keys found" error:**
+**"No AI CLI tool found" error:**
 
-You need to set at least one API key:
-```fish
-set -Ux OPENAI_API_KEY "sk-..."
-# or
-set -Ux ANTHROPIC_API_KEY "sk-ant-..."
-# or
-set -Ux DEEPSEEK_API_KEY "sk-..."
-```
+Install and authenticate at least one of:
+- GitHub Copilot CLI: https://github.com/github/copilot-cli
+- Cursor Agent CLI: https://cursor.com/cli
+- Claude Code CLI: https://claude.com/claude-code
 
-**"API request failed" error:**
+**Nothing happens / times out after 10s:**
 
-First, check that your API key is valid:
-```fish
-echo $OPENAI_API_KEY  # Should show your key
-```
-
-Then test network connectivity:
-```fish
-curl -I https://api.openai.com/v1/models  # Test OpenAI
-curl -I https://api.anthropic.com/v1/messages  # Test Anthropic
-curl -I https://api.deepseek.com/v1/models  # Test DeepSeek
-```
-
-Also make sure your API key has access to chat completions/messages endpoints. If you hit rate limits, wait a moment and try again, or use a different provider.
-
-**"Failed to parse API response" error:**
-
-This usually means there's an API error. Check that:
-- Your API key is correct and has sufficient credits
-- The model name is valid (if you customized `JJ_AI_*_MODEL`)
-- The API service is operational
+Make sure the CLI tool you selected is authenticated — run it directly once outside of jj.fish to confirm it works and complete any login flow.
 
 **Slow performance:**
 
-The feature uses direct API calls and should be fast (1-3 seconds). If it's slow, check your internet connection. Large diffs are automatically truncated, but very large repos may still be slow. You can also try a different provider since some are faster than others.
+Response time depends on the underlying CLI tool. Large diffs may take longer regardless of which tool you use.
 
 ## Development
 
