@@ -10,4 +10,8 @@ function __jj_ai_detect_tools --description "Detect available AI CLI tools"
     if command -q claude
         echo claude
     end
+
+    if command -q codex
+        echo codex
+    end
 end
