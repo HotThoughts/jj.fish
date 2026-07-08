@@ -6,6 +6,7 @@ function __jj_ai_select_tool --description "Interactive AI tool selector"
         echo "  - GitHub Copilot CLI: https://github.com/github/copilot-cli" >&2
         echo "  - Cursor Agent CLI: https://cursor.com/cli" >&2
         echo "  - Claude Code CLI: https://claude.com/claude-code" >&2
+        echo "  - Codex CLI: https://github.com/openai/codex" >&2
         return 1
     end
 

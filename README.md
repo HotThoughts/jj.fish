@@ -102,6 +102,7 @@ Automatically generates conventional commit messages by piping your diff to whic
 - **GitHub Copilot CLI** (`copilot`) - https://github.com/github/copilot-cli
 - **Cursor Agent CLI** (`cursor-agent`) - https://cursor.com/cli
 - **Claude Code CLI** (`claude`) - https://claude.com/claude-code
+- **Codex CLI** (`codex`) - https://github.com/openai/codex
 
 **Setup:**
 
@@ -109,7 +110,7 @@ Install and authenticate at least one of the CLI tools above, following that too
 
 If you have more than one installed, you can skip the selection prompt by setting a preferred one:
 ```fish
-set -Ux JJ_AI_TOOL claude  # Options: copilot, cursor-agent, claude
+set -Ux JJ_AI_TOOL claude  # Options: copilot, cursor-agent, claude, codex
 ```
 
 **Usage:**
@@ -126,7 +127,8 @@ jjac
 #   1) copilot
 #   2) cursor-agent
 #   3) claude
-# Choice [1-3]:
+#   4) codex
+# Choice [1-4]:
 ```
 
 **How it works:**
@@ -267,6 +269,7 @@ Install and authenticate at least one of:
 - GitHub Copilot CLI: https://github.com/github/copilot-cli
 - Cursor Agent CLI: https://cursor.com/cli
 - Claude Code CLI: https://claude.com/claude-code
+- Codex CLI: https://github.com/openai/codex
 
 **Nothing happens / times out after 10s:**
 

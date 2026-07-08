@@ -17,6 +17,11 @@ function __jj_ai_commit_message --description "Generate commit message using ava
             echo "$diff_content" | cursor-agent "$prompt" 2>/dev/null | tail -n 1
         case claude
             echo "$diff_content" | claude "$prompt" 2>/dev/null | tail -n 1
+        case codex
+            set -l last_message_file (mktemp)
+            echo "$diff_content" | codex exec -o "$last_message_file" "$prompt" >/dev/null 2>&1
+            cat "$last_message_file" 2>/dev/null
+            rm -f "$last_message_file"
         case '*'
             echo "Unknown AI tool: $tool" >&2
             return 1
