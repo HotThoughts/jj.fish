@@ -1,4 +1,4 @@
-# jj.fish 🌿
+# jj.fish
 
 Fish shell abbreviations for [jj (Jujutsu)](https://github.com/martinvonz/jj) - fast shortcuts for common operations.
 
@@ -97,31 +97,53 @@ fisher install HotThoughts/jj.fish
 
 | Function | Description                                              |
 | -------- | -------------------------------------------------------- |
-| `jjad`   | AI-generated description via `jj describe` |
-| `jjac`   | AI-generated commit via `jj commit` |
+| `jjad`   | AI-generated description via `jj describe`              |
+| `jjac`   | AI-generated commit via `jj commit`                     |
 
-Uses AI to analyze your changes and generate conventional commit messages.
+Automatically generates conventional commit messages by piping your diff to whichever AI CLI tool you already have installed and authenticated — no separate API keys required.
 
-**Supported AI tools** (auto-detected):
-- GitHub Copilot standalone (`copilot`)
-- Cursor Agent (`cursor-agent`)
-- Claude CLI (`claude`)
+**Features:**
+- No extra setup: reuses your existing CLI login (Copilot, Cursor, or Claude)
+- Smart: Analyzes diffs and generates conventional commit messages
+- Auto-detection: Picks the tool automatically, or lets you choose if more than one is available
+- Responsive: Shows a spinner while generating, with a 10s timeout so it never hangs
+
+**Supported AI CLI tools:**
+- **GitHub Copilot CLI** (`copilot`) - https://github.com/github/copilot-cli
+- **Cursor Agent CLI** (`cursor-agent`) - https://cursor.com/cli
+- **Claude Code CLI** (`claude`) - https://claude.com/claude-code
+- **Codex CLI** (`codex`) - https://github.com/openai/codex
+
+**Setup:**
+
+Install and authenticate at least one of the CLI tools above, following that tool's own login flow. jj.fish auto-detects whichever ones are on your `$PATH`.
+
+If you have more than one installed, you can skip the selection prompt by setting a preferred one:
+```fish
+set -Ux JJ_AI_TOOL claude  # Options: copilot, cursor-agent, claude, codex
+```
 
 **Usage:**
+
 ```fish
-# If only one AI tool is installed, it's used automatically
+# Generate and set description (with confirmation)
 jjad
+
+# Generate and commit (with confirmation)
+jjac
 
 # If multiple tools are available, you'll get an interactive selection:
 # Multiple AI tools detected. Select one:
 #   1) copilot
 #   2) cursor-agent
 #   3) claude
-# Choice [1-3]:
-
-# Or set a preferred tool via environment variable
-set -Ux JJ_AI_TOOL copilot  # Options: copilot, cursor-agent, claude
+#   4) codex
+# Choice [1-4]:
 ```
+
+**How it works:**
+
+When you run `jjad` or `jjac`, it analyzes your current changes using `jj diff`, pipes the diff to your selected AI CLI tool, generates a conventional commit message, shows you a preview for confirmation, and then applies it via `jj describe` or `jj commit`.
 
 ### PR Creation
 
@@ -169,7 +191,7 @@ abbr --erase jjnm
 
 ### "jj not found" error
 
-The plugin requires jj to be installed and in your PATH.
+Make sure jj is installed and in your PATH.
 
 **Install jj:**
 
@@ -189,7 +211,7 @@ jj --version
 
 ### "gh CLI not found" when using jjpr
 
-The `jjpr` function requires the GitHub CLI to create pull requests.
+You'll need the GitHub CLI installed to use `jjpr`.
 
 **Install gh:**
 
@@ -209,50 +231,63 @@ gh auth login
 
 ### Abbreviations not working
 
-1. **Check plugin is loaded:**
+First, check if the plugin is loaded:
+```fish
+abbr --show | grep jj
+```
+This should show your jj abbreviations.
 
-   ```fish
-   abbr --show | grep jj
-   ```
+If not, try reloading your Fish config:
+```fish
+source ~/.config/fish/config.fish
+```
 
-   Should show jj abbreviations.
-
-2. **Reload Fish config:**
-
-   ```fish
-   source ~/.config/fish/config.fish
-   ```
-
-3. **Reinstall plugin:**
-   ```fish
-   fisher remove HotThoughts/jj.fish
-   fisher install HotThoughts/jj.fish
-   ```
+If that doesn't work, reinstall the plugin:
+```fish
+fisher remove HotThoughts/jj.fish
+fisher install HotThoughts/jj.fish
+```
 
 ### jjpr fails with "could not determine branch name"
 
-This occurs when jj doesn't output the expected branch name format after pushing.
-
-**Workaround:**
+Sometimes jj doesn't output the branch name in the expected format after pushing. If this happens:
 
 1. Push manually: `jj git push -c <change-id>`
-2. Note the branch name from output
-3. Create PR manually: `gh pr create --head <branch-name>`
+2. Note the branch name from the output
+3. Create the PR manually: `gh pr create --head <branch-name>`
 
-**Report:** If this happens consistently, please file an issue with your jj version (`jj --version`).
+If this happens consistently, please file an issue with your jj version (`jj --version`).
 
 ### Using repositories with non-"main" default branches
 
-The `jjpr` function automatically detects your repository's default branch (main, master, develop, etc.) and creates PRs against it. No configuration needed.
+The `jjpr` function automatically detects your repository's default branch (main, master, develop, etc.) and creates PRs against it. You don't need to configure anything.
 
 ### Change ID not found
 
-Ensure you're using a valid change ID from `jj log`:
+Make sure you're using a valid change ID from `jj log`:
 
 ```fish
 jjl              # View change history
 jjpr abc123def   # Use the change ID prefix (first 7-12 chars)
 ```
+
+### AI commit message generation fails
+
+**"No AI CLI tool found" error:**
+
+Install and authenticate at least one of:
+- GitHub Copilot CLI: https://github.com/github/copilot-cli
+- Cursor Agent CLI: https://cursor.com/cli
+- Claude Code CLI: https://claude.com/claude-code
+- Codex CLI: https://github.com/openai/codex
+
+**Nothing happens / times out after 10s:**
+
+Make sure the CLI tool you selected is authenticated — run it directly once outside of jj.fish to confirm it works and complete any login flow.
+
+**Slow performance:**
+
+Response time depends on the underlying CLI tool. Large diffs may take longer regardless of which tool you use.
 
 ## Development
 
@@ -273,8 +308,8 @@ pre-commit install --hook-type pre-push
 
 **What gets checked:**
 
-- Fish shell syntax validation (`fish --no-execute`)
-- Fish shell indentation (`fish_indent --check`)
+- Fish shell syntax validation
+- Fish shell indentation
 - Trailing whitespace and end-of-file fixes
 - YAML validity
 - Test suite execution
@@ -312,7 +347,7 @@ pre-commit = [
 ]
 ```
 
-This alias runs pre-commit checks only on files changed in your current change (using `jj diff -r @ --name-only`), making it fast and efficient.
+This alias runs pre-commit checks only on files changed in your current change, making it fast and efficient.
 
 **Usage:**
 ```fish

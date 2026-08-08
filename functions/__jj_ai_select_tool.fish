@@ -2,10 +2,11 @@ function __jj_ai_select_tool --description "Interactive AI tool selector"
     set -l tools (__jj_ai_detect_tools)
 
     if test (count $tools) -eq 0
-        echo (set_color red)"✗ No AI tools found. Please install one:"(set_color normal) >&2
-        echo "  - copilot: https://github.com/github/copilot-cli" >&2
-        echo "  - cursor-agent: https://cursor.sh" >&2
-        echo "  - claude: https://claude.ai/cli" >&2
+        echo (set_color red)"✗ No AI CLI tool found. Please install one:"(set_color normal) >&2
+        echo "  - GitHub Copilot CLI: https://github.com/github/copilot-cli" >&2
+        echo "  - Cursor Agent CLI: https://cursor.com/cli" >&2
+        echo "  - Claude Code CLI: https://claude.com/claude-code" >&2
+        echo "  - Codex CLI: https://github.com/openai/codex" >&2
         return 1
     end
 
